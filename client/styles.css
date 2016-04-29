@@ -3,3 +3,23 @@
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
 
+.center {
+  transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);  
+  -o-transform: translateX(-50%) translateY(-50%);
+}
+
+.board {
+  position: absolute;
+  height: 400px;
+  width: 600px;
+  left: 50%;
+  top: 50%;
+  background-color: black;
+}
+
+svg .circles {
+
+}
