@@ -10,25 +10,7 @@ var svg = d3.select('.board')
             .attr('height', boardHeight);
 
 
-var drag = d3.behavior.drag()
-  .on('drag', function() {
-    var px = player.attr('cx');
-    var py = player.attr('cy');
-    if (px > 575) {
-      player.attr('cx', 575).attr('cy', d3.event.y);
-    } else if (px < 25) {
-      player.attr('cx', 25).attr('cy', d3.event.y);
-    } else if (py > 375) {
-      player.attr('cx', d3.event.x).attr('cy', 375);
-    } else if (py < 25) {
-      player.attr('cx', d3.event.x).attr('cy', 25);
-    } else {
-      player.attr('cx', d3.event.x).attr('cy', d3.event.y);
-    }
-  });
-
 var allCircles = [2, 2, 2, 2, 2, 2, 2, 2, 2];
-
 
 var createCircles = function(arr, color) {
   svg.selectAll('circle')
@@ -50,24 +32,40 @@ var createCircles = function(arr, color) {
    .attr('position', 'absolute')
    .style('fill', color);
 };
+createCircles(allCircles, 'green');
 
-createCircles(allCircles, 'white');
-
+var drag = d3.behavior.drag()
+  .on('drag', function() {
+    var px = player.attr('cx');
+    var py = player.attr('cy');
+    if (px > 575) {
+      player.attr('cx', 575).attr('cy', d3.event.y);
+    } else if (px < 25) {
+      player.attr('cx', 25).attr('cy', d3.event.y);
+    } else if (py > 375) {
+      player.attr('cx', d3.event.x).attr('cy', 375);
+    } else if (py < 25) {
+      player.attr('cx', d3.event.x).attr('cy', 25);
+    } else {
+      player.attr('cx', d3.event.x).attr('cy', d3.event.y);
+    }
+  });
 
 svg.select('circle')
     .attr('cx', boardWidth / 2)
     .attr('cy', boardHeight / 2)
-    .style('fill', 'blue')
+    .style('fill', 'orange')
     .attr('class', 'player')
     .classed('enemy', false)
     .call(drag);
+
+
 
 var player = svg.select('.player');
 var enemies = svg.selectAll('.enemy');
 
 
 var moveEnemies = function() {
-  
   enemies.transition()
          .duration(1000)
          .attr('cx', function() {
@@ -103,13 +101,14 @@ var collisionCheck = function() {
         .style('background-color', 'red')
         .transition()
         .delay(100)
-        .style('background-color', 'black');
+        .style('background-color', 'white');
 
     } else {
       return false;
     }
   };
 };
+
 
 var resetScore = function() {
   if (score > highScore) {
