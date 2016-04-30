@@ -6,6 +6,22 @@ var svg = d3.select('.board')
             .attr('width', boardWidth)
             .attr('height', boardHeight);
 
+var gameStats = {};
+gameStats.score = 0;
+gameStats.bestScore = 0;
+
+function updateScore(){
+  d3.select('.curr')
+      .text(gameStats.score.toString())
+}
+
+function updateBestScore(){
+  gameStats.bestScore =
+    Math.max ([gameStats.bestScore, gameStats.score])
+
+  d3.select('.high').text(gameStats.bestScore.toString())
+}
+
 var drag = d3.behavior.drag()
   .on('drag', function() {
     player.attr('cx', d3.event.x).attr('cy', d3.event.y);
@@ -49,7 +65,9 @@ svg.select('circle')
 var player = svg.select('.player');
 var enemies = svg.selectAll('.enemy');
 
+
 var moveEnemies = function() {
+  
   enemies.transition()
          .duration(1000)
          .attr('cx', function() {
@@ -65,7 +83,6 @@ var moveEnemies = function() {
 setInterval(moveEnemies, 1000); 
 
 
-
 var distance = function(player, enemy) {
   var px = player.attr('cx');
   var py = player.attr('cy');
@@ -79,13 +96,19 @@ var collisionCheck = function() {
     var pr = Number(player.attr('r'));
     var er = Number(this.r.animVal.value);
     if ((pr + er) > distance(player, this)) {
+      updateBestScore()
+      gameStats.score = 0;
+      updateScore();
       d3.select('.board')
         .style('background-color', 'red')
         .transition()
         .delay(100)
         .style('background-color', 'black');
+
     } else {
       return false;
     }
   };
 };
+
+
