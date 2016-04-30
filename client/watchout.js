@@ -1,4 +1,7 @@
 // start slingin' some d3 here.
+var score = 0;
+var highScore = 0;
+//var collisionCounter = 0;
 var boardWidth = 600;
 var boardHeight = 400;
 var svg = d3.select('.board')
@@ -6,25 +9,22 @@ var svg = d3.select('.board')
             .attr('width', boardWidth)
             .attr('height', boardHeight);
 
-var gameStats = {};
-gameStats.score = 0;
-gameStats.bestScore = 0;
-
-function updateScore(){
-  d3.select('.curr')
-      .text(gameStats.score.toString())
-}
-
-function updateBestScore(){
-  gameStats.bestScore =
-    Math.max ([gameStats.bestScore, gameStats.score])
-
-  d3.select('.high').text(gameStats.bestScore.toString())
-}
 
 var drag = d3.behavior.drag()
   .on('drag', function() {
-    player.attr('cx', d3.event.x).attr('cy', d3.event.y);
+    var px = player.attr('cx');
+    var py = player.attr('cy');
+    if (px > 575) {
+      player.attr('cx', 575).attr('cy', d3.event.y);
+    } else if (px < 25) {
+      player.attr('cx', 25).attr('cy', d3.event.y);
+    } else if (py > 375) {
+      player.attr('cx', d3.event.x).attr('cy', 375);
+    } else if (py < 25) {
+      player.attr('cx', d3.event.x).attr('cy', 25);
+    } else {
+      player.attr('cx', d3.event.x).attr('cy', d3.event.y);
+    }
   });
 
 var allCircles = [2, 2, 2, 2, 2, 2, 2, 2, 2];
@@ -96,9 +96,9 @@ var collisionCheck = function() {
     var pr = Number(player.attr('r'));
     var er = Number(this.r.animVal.value);
     if ((pr + er) > distance(player, this)) {
-      updateBestScore()
-      gameStats.score = 0;
-      updateScore();
+      //collisionCounter++
+      //d3.select('.coll').text(collisionCounter);
+      resetScore();
       d3.select('.board')
         .style('background-color', 'red')
         .transition()
@@ -111,4 +111,16 @@ var collisionCheck = function() {
   };
 };
 
+var resetScore = function() {
+  if (score > highScore) {
+    highScore = score;
+    d3.select('.high').text(highScore);
+  }
+  score = 0;
+};
+
+setInterval(function() {
+  score++;
+  d3.select('.curr').text(score);
+}, 50);
 

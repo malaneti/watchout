@@ -1,7 +1,4 @@
-/* your beautiful css styling goes here! */
-
-/* Note: an asteroid image is included in this repo.
-Feel free to use it if you like. */
+@import url(https://fonts.googleapis.com/css?family=Raleway);
 
 .center {
   transform: translateX(-50%) translateY(-50%);
@@ -11,6 +8,12 @@ Feel free to use it if you like. */
   -o-transform: translateX(-50%) translateY(-50%);
 }
 
+.scoreboard {
+  font-size: 20px;
+  font-family: 'Raleway';
+  text-transform: lowercase;
+}
+
 .board {
   position: absolute;
   height: 400px;
@@ -18,8 +21,4 @@ Feel free to use it if you like. */
   left: 50%;
   top: 50%;
   background-color: black;
-}
-
-svg .circles {
-
 }
