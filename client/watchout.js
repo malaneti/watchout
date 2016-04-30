@@ -7,10 +7,11 @@ var svg = d3.select('.board')
             .attr('height', boardHeight);
 
 var drag = d3.behavior.drag()
-  .on('drag', function(){
-    player.attr('cx', d3.event.x).attr('cy' , d3.event.y)});           
+  .on('drag', function() {
+    player.attr('cx', d3.event.x).attr('cy', d3.event.y);
+  });
 
-var allCircles = [1, 1, 1, 1, 1, 2, 2, 2, 2];
+var allCircles = [2, 2, 2, 2, 2, 2, 2, 2, 2];
 
 
 var createCircles = function(arr, color) {
@@ -19,10 +20,10 @@ var createCircles = function(arr, color) {
    .enter()
    .append('circle')
    .attr('cx', function(d) {
-     return 300;
+     return Math.random() * boardWidth;
    })
    .attr('cy', function(d) {
-     return 200;
+     return Math.random() * boardHeight;
    })
    .attr('r', function(d) {
      return d * 10;
@@ -32,20 +33,14 @@ var createCircles = function(arr, color) {
    .attr('class', 'enemy')
    .attr('position', 'absolute')
    .style('fill', color);
-   // .tween
 };
 
 createCircles(allCircles, 'white');
 
 
 svg.select('circle')
-    // .datum([{x: 300, y: 200}])
-    // .attr('cx', function(d) {
-    //   return d[0].x;
-    // })
-    // .attr('cy', function(d) {
-    //   return d[0].y;
-    // })
+    .attr('cx', boardWidth / 2)
+    .attr('cy', boardHeight / 2)
     .style('fill', 'blue')
     .attr('class', 'player')
     .classed('enemy', false)
@@ -53,7 +48,6 @@ svg.select('circle')
 
 var player = svg.select('.player');
 var enemies = svg.selectAll('.enemy');
-
 
 var moveEnemies = function() {
   enemies.transition()
@@ -64,7 +58,8 @@ var moveEnemies = function() {
          .attr('cy', function() {
            var random = Math.random() * boardHeight;
            return random;
-         });
+         })
+         .tween('test', collisionCheck);
 };
 setInterval(moveEnemies, 1000); 
 
@@ -73,37 +68,23 @@ setInterval(moveEnemies, 1000);
 var distance = function(player, enemy) {
   var px = player.attr('cx');
   var py = player.attr('cy');
-  var ex = enemy.attr('cx');
-  var ey = enemy.attr('cy');
+  var ex = enemy.cx.animVal.value;
+  var ey = enemy.cy.animVal.value;
   return Math.sqrt(Math.pow((px - ex), 2) + Math.pow((py - ey), 2));
 };
 
- var collisionCheck = function() {
- // _.each(enemies, function(enemy){
- //  //get pr and er
- //   if ((pr + er)< distance (player, enemy)){
- //    return true
- //   }
-
- // })
-//   var pr = player.attr('r');
-//   console.log(enemy);
-//   var er = enemy.attr('r');
-//   if ((pr + er) < distance(player, enemy)) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// };
-
-// enemies.each(function(enemy) {
-//   if (collisionCheck(player, enemy)) {
-//     svg.style('fill', 'red');
-//   }
-// });
-
-// for (var x = 0; x < enemies[0].length; x++) {
-//   if (collisionCheck(player, enemies[0][x])) {
-//     svg.style('fill', 'red');
-//   }
-// }
+var collisionCheck = function() {
+  return function() {
+    var pr = Number(player.attr('r'));
+    var er = Number(this.r.animVal.value);
+    if ((pr + er) > distance(player, this)) {
+      d3.select('.board')
+        .style('background-color', 'red')
+        .transition()
+        .delay(100)
+        .style('background-color', 'black');
+    } else {
+      return false;
+    }
+  };
+};
