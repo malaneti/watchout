@@ -51,6 +51,7 @@ var enemies = svg.selectAll('.enemy');
 
 var moveEnemies = function() {
   enemies.transition()
+         .duration(1000)
          .attr('cx', function() {
            var random = Math.random() * boardWidth;
            return random;
