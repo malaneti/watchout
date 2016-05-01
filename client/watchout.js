@@ -32,7 +32,7 @@ var createCircles = function(arr, color) {
    .attr('position', 'absolute')
    .style('fill', color);
 };
-createCircles(allCircles, 'green');
+createCircles(allCircles, '#248f24');
 
 var drag = d3.behavior.drag()
   .on('drag', function() {
@@ -54,7 +54,7 @@ var drag = d3.behavior.drag()
 svg.select('circle')
     .attr('cx', boardWidth / 2)
     .attr('cy', boardHeight / 2)
-    .style('fill', 'orange')
+    .style('fill', '#ff9e14')
     .attr('class', 'player')
     .classed('enemy', false)
     .call(drag);
@@ -98,10 +98,10 @@ var collisionCheck = function() {
       //d3.select('.coll').text(collisionCounter);
       resetScore();
       d3.select('.board')
-        .style('background-color', 'red')
+        .style('background-color', '#ff6961')
         .transition()
         .delay(100)
-        .style('background-color', 'white');
+        .style('background-color', '#CFCFC4');
 
     } else {
       return false;
